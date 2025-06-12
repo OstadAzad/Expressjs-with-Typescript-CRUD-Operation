@@ -8,17 +8,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const app_1 = __importDefault(require("./app"));
-const db_1 = require("./utils/db");
-const port = 5000;
-const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, db_1.connectDb)();
-    app_1.default.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
-        console.log(`server is running ${port}`);
-    }));
+exports.getDb = exports.connectDb = void 0;
+const mongodb_1 = require("mongodb");
+const uri = "mongodb+srv://mongodb:mongodb@cluster0.q4bfyf2.mongodb.net/usersdb?retryWrites=true&w=majority&appName=Cluster0";
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new mongodb_1.MongoClient(uri);
+let db;
+const connectDb = () => __awaiter(void 0, void 0, void 0, function* () {
+    yield client.connect();
+    db = client.db("usersdb"); //database name
+    console.log("MongoDB connected");
 });
-startServer();
+exports.connectDb = connectDb;
+const getDb = () => db;
+exports.getDb = getDb;
